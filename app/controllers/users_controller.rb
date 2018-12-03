@@ -4,9 +4,13 @@ class UsersController < ApplicationController
   end
 
   def create
-    byebug
-    @user = User.new user_params
-    @user.save
+    @user = User.new (user_params)
+    if @user.save
+      flash[:success] = "Welcome !"
+      redirect_to "/users/#{@user.id}"
+    else
+      render :new
+    end
   end
 
   def show
