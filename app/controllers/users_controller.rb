@@ -5,7 +5,9 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new (user_params)
+
     if @user.save
+      log_in
       flash[:success] = "Welcome !"
       redirect_to "/users/#{@user.id}"
     else
@@ -18,6 +20,10 @@ class UsersController < ApplicationController
     @user = User.find params[:id]
   end
 
+  def destroy
+    log_out
+    redirect_to root_url
+  end
   private
 
   def user_params
