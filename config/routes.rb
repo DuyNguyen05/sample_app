@@ -8,10 +8,13 @@ root "static_pages#home"
   get "/about" ,to: "static_pages#about"
 
   get "/signup" , to:"users#new"
+  get "/users" ,to: "users#index"
   #get "/users/new", to:"users#new"
   get "/users/:id", to:"users#show"
   post "/users", to:"users#create"
   post "/signup", to:"users#create"
+  get "/users/:id/edit" ,to: "users#edit"
+  patch "/users/:id" ,to: "users#update"
 
   get "/login" , to: "sessions#new"
   post "/login" , to: "sessions#create"
