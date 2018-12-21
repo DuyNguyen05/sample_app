@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
-before_action :authenticate, only: [:index, :edit, :update]
+before_action :authenticate, only: [ :edit, :update, :destroy]
 before_action :correct_user, only: [:edit, :update]
+before_action :check , only:[:new ,:create]
+before_action :verify_admin? , only: [:destroy]
+
+
   def index
     @users = User.paginate(page: params[:page], per_page: 20)
   end
@@ -11,9 +15,8 @@ before_action :correct_user, only: [:edit, :update]
 
   def create
     @user = User.new (user_params)
-
     if @user.save
-      log_in
+      log_in @user
       flash[:success] = "Welcome !"
       redirect_to "/users/#{@user.id}"
     else
@@ -32,7 +35,7 @@ before_action :correct_user, only: [:edit, :update]
 
   def update
     @user = User.find params[:id]
-      if @user.update user_params
+      if @user.update! user_params
         flash[:success] = "Profile Updated!!"
         redirect_to "/users/#{@user.id}"
       else
@@ -41,10 +44,19 @@ before_action :correct_user, only: [:edit, :update]
 
   end
 
-  def destroy
+  def destroy_login
     log_out
     redirect_to root_url
   end
+
+  def destroy
+    #byebug
+    @user.destroy
+    #@user =User.find(params[:id]).destroy
+    flash[:success] = "User destroyed!"
+    redirect_to "/users"
+  end
+
   private
 
   def user_params
@@ -63,4 +75,11 @@ before_action :correct_user, only: [:edit, :update]
     flash[:warning] = "NOT Permission!!"
     redirect_to root_url
   end
+
+  def verify_admin?
+    @user = User.find(params[:id])
+    return if current_user.admin?
+    redirect_to root_url
+  end
+
 end

@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+ before_action :check , only:[:new , :create]
   def new
 
   end

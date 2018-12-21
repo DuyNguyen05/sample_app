@@ -15,6 +15,7 @@ root "static_pages#home"
   post "/signup", to:"users#create"
   get "/users/:id/edit" ,to: "users#edit"
   patch "/users/:id" ,to: "users#update"
+  delete "/users/delete" , to: "users#destroy"
 
   get "/login" , to: "sessions#new"
   post "/login" , to: "sessions#create"
