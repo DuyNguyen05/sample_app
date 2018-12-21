@@ -34,10 +34,18 @@ module SessionsHelper
     cookies.delete(:remember_token)
 
   end
+
   def log_out
     forget current_user
     session.delete :user_id
     @current_user = nil
   end
+
+  def check
+     return if !logged_in?
+     flash[:warning] = "You should Log out to do access!"
+     redirect_to root_url
+  end
+
 
 end
